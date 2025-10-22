@@ -1,0 +1,95 @@
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    pull_policy: never
+    image: wordpress-mariadb:Incep
+    container_name: mariadb
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_123
+      MYSQL_DATABASE: wp_db
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_passwd
+    volumes:
+      - incp_database:/var/lib/mysql
+    networks:
+      - my_net
+    restart: unless-stopped
+
+  php-fpm:
+    build: ./requirements/wordpress
+    pull_policy: never
+    image: wordpress-php:Incep
+    container_name: wordpress
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    volumes:
+      - incp_wordpress:/var/www/wordpress
+    networks:
+      - my_net
+    restart: unless-stopped
+
+  nginx:
+    build: ./requirements/nginx
+    pull_policy: never
+    image: wordpress-nginx:Incep
+    container_name: nginx
+    depends_on:
+      - php-fpm
+    ports:
+      - "443:443"
+    volumes:
+      - incp_wordpress:/var/www/wordpress
+    networks:
+      - my_net
+    restart: unless-stopped
+
+  adminer:
+    build: ./requirements/bonus/adminer
+    pull_policy: never
+    image: adminer:Incep
+    container_name: adminer
+    depends_on:
+      - mariadb
+    ports:
+      - "8081:8081"
+    networks:
+      - my_net
+    restart: unless-stopped
+
+  cadvisor:
+    build: ./requirements/bonus/cAdvisor
+    pull_policy: never
+    image: cadvisor:Incep
+    container_name: cadvisor  
+    ports:
+      - "8082:8080"
+    volumes:
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - my_net
+    restart: unless-stopped
+
+volumes:
+  incp_database:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/laoubaid/data/database
+
+  incp_wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/laoubaid/data/wordpress
+
+networks:
+  my_net:
+    driver: bridge
