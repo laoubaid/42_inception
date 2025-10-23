@@ -12,7 +12,7 @@ if [ ! -f "/var/www/wordpress/wp-includes/version.php" ]; then
     wp core download --allow-root
 fi
 
-until mariadb -h $DB_HOST -u $DB_USER -p$DB_PASS --skip-ssl --connect-timeout=3 -e "SELECT 1;">/dev/null 2>&1; do
+until mariadb -h $DB_HOST -u $DB_USER -p$DB_PASS --skip-ssl --connect-timeout=3 -e "SELECT 1;">/dev/null 2>/dev/null; do
     TRIES=$((TRIES + 1))
     if [ "$TRIES" -ge "$MAX_TRIES" ]; then
         echo "ERROR: MariaDB not available! Exiting..."
@@ -49,7 +49,7 @@ if ! wp core is-installed --allow-root 2>/dev/null; then
         --user_pass=$WP_USER_PASSWD \
         --display_name="Test User" \
         --allow-root
-    echo "Test user created: testuser / testpass123"
+    echo "Test user created"
 else
     echo "WordPress already installed, skipping..."
 fi

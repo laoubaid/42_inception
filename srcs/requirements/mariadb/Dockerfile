@@ -10,4 +10,6 @@ RUN mkdir -p /var/run/mysqld /var/lib/mysql && \
 COPY init_db.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/init_db.sh
 
+EXPOSE 3306
+
 ENTRYPOINT ["/usr/local/bin/init_db.sh"]

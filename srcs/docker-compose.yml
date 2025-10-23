@@ -2,25 +2,20 @@ services:
   mariadb:
     build: ./requirements/mariadb
     pull_policy: never
-    image: wordpress-mariadb:Incep
+    image: mariadb:Incep
     container_name: mariadb
     env_file:
       - .env
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password_123
-      MYSQL_DATABASE: wp_db
-      MYSQL_USER: wp_user
-      MYSQL_PASSWORD: wp_passwd
     volumes:
       - incp_database:/var/lib/mysql
     networks:
       - my_net
     restart: unless-stopped
 
-  php-fpm:
+  wordpress:
     build: ./requirements/wordpress
     pull_policy: never
-    image: wordpress-php:Incep
+    image: wordpress:Incep
     container_name: wordpress
     env_file:
       - .env
@@ -35,10 +30,10 @@ services:
   nginx:
     build: ./requirements/nginx
     pull_policy: never
-    image: wordpress-nginx:Incep
+    image: nginx:Incep
     container_name: nginx
     depends_on:
-      - php-fpm
+      - wordpress
     ports:
       - "443:443"
     volumes:

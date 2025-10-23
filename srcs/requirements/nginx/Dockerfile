@@ -11,7 +11,7 @@ RUN openssl req -x509 -newkey rsa:4096 \
     -subj "/C=MA/ST=Marrakech/L=Bengruir/O=Laoubaid/OU=Inception/CN=laoubaid.42.fr"
 
 COPY tools/nginx.conf /etc/nginx/nginx.conf
-COPY tools/index.html /var/www/wordpress/index.html
+COPY tools/index.html /var/www/wordpress/static/index.html
 
 RUN chmod 600 /etc/nginx/certs/incep.key \
     && chmod 644 /etc/nginx/certs/incep.crt \

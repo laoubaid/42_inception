@@ -26,7 +26,6 @@ clean: down
 fclean: clean
 	sudo rm -rf $(DATA_DIR)/database/*
 	sudo rm -rf $(DATA_DIR)/wordpress/*
-	sudo rm -rf $(DATA_DIR)/nginx/*
 	@docker compose -f $(COMPOSE_FILE) down --rmi all --volumes
 
 re: fclean all
