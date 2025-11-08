@@ -65,4 +65,4 @@ make help
 ## Notes
 
 - Your environment variables are expected to be in .env under srcs/.
-- Data is persisted inside /home/<user>/data/ (bind-mounted volumes), you can change it in docker-compose.yml.
+- Data is persisted inside /home/your_home/data/ (bind-mounted volumes), you can change it in docker-compose.yml.
